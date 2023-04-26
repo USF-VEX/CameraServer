@@ -1,10 +1,11 @@
 import subprocess
 import cv2
 import numpy as np
+import platform
 
 # Set up FFmpeg command
 input_stream = 'tcp://192.168.1.92:8798'
-path = "E:\\Desktop\\All Folders\\ffmpeg\\bin\\ffmpeg.exe"
+path = "E:\\Desktop\\All Folders\\ffmpeg\\bin\\ffmpeg.exe" if platform.system() == "Windows" else "ffmpeg"
 ffmpeg_command = f'{path} -i {input_stream} -vf scale=1456:800 -pix_fmt bgr24 -vcodec rawvideo -f image2pipe pipe:'.split()
 
 # Set up FFmpeg process
