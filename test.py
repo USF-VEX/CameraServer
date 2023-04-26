@@ -152,8 +152,8 @@ square_size = 1.2 * 25.4  # Square size in the checkerboard (in your case, 1.2 i
 video_source_gs = "tcp://192.168.1.92:8798"
 video_source_ds = 0
 
-ret_gs, mtx_gs, dist_gs, rvecs_gs, tvecs_gs = calibrate_camera(video_source_gs, checkerboard_size, square_size, "global_shutter")
-ret_ds, mtx_ds, dist_ds, rvecs_ds, tvecs_ds = calibrate_camera(video_source_ds, checkerboard_size, square_size, "depth_sense")
+calibrate_camera(video_source_gs, checkerboard_size, square_size, "global_shutter")
+calibrate_camera(video_source_ds, checkerboard_size, square_size, "depth_sense")
 
 import json
 
