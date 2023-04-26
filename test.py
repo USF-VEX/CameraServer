@@ -4,6 +4,7 @@ import pyrealsense2 as rs
 import threading
 import queue
 import sys
+import platform
 import subprocess
 
 def read_frames(process, width, height, frame_queue):
@@ -47,7 +48,7 @@ def getCam(video_source):
 
         # Set up FFmpeg command
         input_stream = 'tcp://192.168.1.92:8798'
-        path = "E:\\Desktop\\All Folders\\ffmpeg\\bin\\ffmpeg.exe"
+        path = "E:\\Desktop\\All Folders\\ffmpeg\\bin\\ffmpeg.exe" if platform.system() == "Windows" else "ffmpeg"
         ffmpeg_command = f'{path} -i {input_stream} -vf scale=1456:800 -fflags nobuffer -flags low_delay -vsync 2 -preset ultrafast -pix_fmt bgr24 -vcodec rawvideo -f image2pipe pipe:'.split()
 
         # Set up FFmpeg process
