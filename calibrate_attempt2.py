@@ -5,61 +5,61 @@ import json
 import time
 
 # Define the size of the checkerboard
-# CHECKERBOARD = (8, 6)
+CHECKERBOARD = (8, 6)
 
-# # Prepare object points
-# objp = np.zeros((CHECKERBOARD[0] * CHECKERBOARD[1], 3), np.float32)
-# objp[:, :2] = np.mgrid[0:CHECKERBOARD[0], 0:CHECKERBOARD[1]].T.reshape(-1, 2)
+# Prepare object points
+objp = np.zeros((CHECKERBOARD[0] * CHECKERBOARD[1], 3), np.float32)
+objp[:, :2] = np.mgrid[0:CHECKERBOARD[0], 0:CHECKERBOARD[1]].T.reshape(-1, 2)
 
-# # Arrays to store object points and image points from all the images
-# objpoints = []
-# imgpoints1 = []
-# imgpoints2 = []
+# Arrays to store object points and image points from all the images
+objpoints = []
+imgpoints1 = []
+imgpoints2 = []
 
-# criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
+criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
 
-# # Load images
-# images1 = glob.glob('global_shutter_images/*.png')
-# images2 = glob.glob('depth_sense_images/*.png')
+# Load images
+images1 = glob.glob('global_shutter_images/*.png')
+images2 = glob.glob('depth_sense_images/*.png')
 
-# for i in range(len(images1)):
-#     img1 = cv2.imread(images1[i])
-#     img2 = cv2.imread(images2[i])
+for i in range(len(images1)):
+    img1 = cv2.imread(images1[i])
+    img2 = cv2.imread(images2[i])
 
-#     # Convert images to grayscale
-#     gray1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
-#     gray2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+    # Convert images to grayscale
+    gray1 = cv2.cvtColor(img1, cv2.COLOR_BGR2GRAY)
+    gray2 = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
 
-#     # Find the chess board corners
-#     ret1, corners1 = cv2.findChessboardCorners(gray1, CHECKERBOARD, cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FAST_CHECK + cv2.CALIB_CB_NORMALIZE_IMAGE)
-#     ret2, corners2 = cv2.findChessboardCorners(gray2, CHECKERBOARD, cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FAST_CHECK + cv2.CALIB_CB_NORMALIZE_IMAGE)
+    # Find the chess board corners
+    ret1, corners1 = cv2.findChessboardCorners(gray1, CHECKERBOARD, cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FAST_CHECK + cv2.CALIB_CB_NORMALIZE_IMAGE)
+    ret2, corners2 = cv2.findChessboardCorners(gray2, CHECKERBOARD, cv2.CALIB_CB_ADAPTIVE_THRESH + cv2.CALIB_CB_FAST_CHECK + cv2.CALIB_CB_NORMALIZE_IMAGE)
 
-#     if ret1 and ret2:
-#         objpoints.append(objp)
+    if ret1 and ret2:
+        objpoints.append(objp)
 
-#         # Refine corner location for accuracy
-#         corners1 = cv2.cornerSubPix(gray1, corners1, (3, 3), (-1, -1), criteria)
-#         imgpoints1.append(corners1)
+        # Refine corner location for accuracy
+        corners1 = cv2.cornerSubPix(gray1, corners1, (3, 3), (-1, -1), criteria)
+        imgpoints1.append(corners1)
 
-#         corners2 = cv2.cornerSubPix(gray2, corners2, (3, 3), (-1, -1), criteria)
-#         imgpoints2.append(corners2)
+        corners2 = cv2.cornerSubPix(gray2, corners2, (3, 3), (-1, -1), criteria)
+        imgpoints2.append(corners2)
 
-# dt = time.time()
-# # Calibrate each camera separately using the detected corners
-# ret1, mtx1, dist1, rvecs1, tvecs1 = cv2.calibrateCamera(objpoints, imgpoints1, gray1.shape[::-1], None, None)
-# ret2, mtx2, dist2, rvecs2, tvecs2 = cv2.calibrateCamera(objpoints, imgpoints2, gray2.shape[::-1], None, None)
-# print("Calibration Time:", time.time() - dt)
+dt = time.time()
+# Calibrate each camera separately using the detected corners
+ret1, mtx1, dist1, rvecs1, tvecs1 = cv2.calibrateCamera(objpoints, imgpoints1, gray1.shape[::-1], None, None)
+ret2, mtx2, dist2, rvecs2, tvecs2 = cv2.calibrateCamera(objpoints, imgpoints2, gray2.shape[::-1], None, None)
+print("Calibration Time:", time.time() - dt)
 
-# # Save the calibration parameters to a JSON file
-# calibration_params = {
-#     'mtx1': mtx1.tolist(),
-#     'dist1': dist1.tolist(),
-#     'mtx2': mtx2.tolist(),
-#     'dist2': dist2.tolist()
-# }
+# Save the calibration parameters to a JSON file
+calibration_params = {
+    'mtx1': mtx1.tolist(),
+    'dist1': dist1.tolist(),
+    'mtx2': mtx2.tolist(),
+    'dist2': dist2.tolist()
+}
 
-# with open('calibration_params.json', 'w') as f:
-#     json.dump(calibration_params, f)
+with open('calibration_params.json', 'w') as f:
+    json.dump(calibration_params, f)
 
 # Load the calibration parameters from the JSON file
 with open('calibration_params.json', 'r') as f:

@@ -40,7 +40,9 @@ def calibrate_camera(video_source, checkerboard_size, square_size, camera_name):
         cam = type("", (), {"read": read_depthsense_color_frame})()
     else:
         cam = cv2.VideoCapture(video_source)
-        cam = type("", (), {"read": read_depthsense_color_frame})()
+        def tmp(self):
+            return FRAME
+        cam = type("", (), {"read": tmp})()
 
     frame_count = 100
 
