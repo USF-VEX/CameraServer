@@ -9,7 +9,7 @@ path = "E:\\Desktop\\All Folders\\ffmpeg\\bin\\ffmpeg.exe" if platform.system() 
 ffmpeg_command = f'{path} -i {input_stream} -vf scale=1456:800 -pix_fmt bgr24 -vcodec rawvideo -f image2pipe pipe:'.split()
 
 # Set up FFmpeg process
-proc = subprocess.Popen(ffmpeg_command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, bufsize=(1456 * 800 * 3))
+proc = subprocess.Popen(ffmpeg_command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
 
 while True:
     # Read raw image bytes from FFmpeg process output
