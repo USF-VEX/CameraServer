@@ -75,7 +75,7 @@ def getCam(video_source):
             else:
                 return False, None
 
-        return type("", (), {"read": getFrame, "frame_queue": frame_queue, "reader_thread": reader_thread})()
+        return type("", (), {"read": getFrame, "reader_thread": reader_thread})()
 
 import os
 
