@@ -53,7 +53,7 @@ def getCam(video_source):
 
         # Set up FFmpeg process
         process = subprocess.Popen(ffmpeg_command, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
-        def read_frames(proc, frame_queue: queue.Queue):
+        def read_frames(proc):
             global global_frame
             while True:
                 # Read raw image bytes from FFmpeg process output
@@ -65,8 +65,7 @@ def getCam(video_source):
                 image_array = np.frombuffer(raw_image, np.uint8)
                 global_frame = image_array.reshape((800, 1456, 3))
 
-        frame_queue = queue.Queue(maxsize=5)
-        reader_thread = threading.Thread(target=read_frames, args=(process, frame_queue))
+        reader_thread = threading.Thread(target=read_frames, args=(process))
         reader_thread.start()
 
         def getFrame(self):
